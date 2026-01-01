@@ -1,0 +1,89 @@
+{
+  "expense_types": {
+    "train": [
+      "train",
+      "rail",
+      "bahn",
+      "sncf",
+      "trenitalia"
+    ],
+    "parking": [
+      "parking",
+      "parkhaus",
+      "garage",
+      "parc auto"
+    ],
+    "hotel": [
+      "hotel",
+      "motel",
+      "hostel",
+      "inn"
+    ],
+    "taxi": [
+      "taxi",
+      "cab",
+      "uber",
+      "lyft",
+      "bolt"
+    ],
+    "bus": [
+      "bus"
+    ],
+    "tram": [
+      "tram",
+      "streetcar",
+      "tramway"
+    ],
+    "breakfast": [
+      "breakfast",
+      "petit dejeuner",
+      "colazione"
+    ],
+    "lunch": [
+      "lunch",
+      "mittagessen",
+      "pranzo"
+    ],
+    "dinner": [
+      "dinner",
+      "abendessen",
+      "cena"
+    ]
+  },
+  "meal_keywords": [
+    "restaurant",
+    "ristorante",
+    "cafe",
+    "cafè",
+    "coffee",
+    "bar",
+    "bistro",
+    "ristorante",
+    "food",
+    "meal",
+    "snack"
+  ],
+  "meal_time_buckets": {
+    "breakfast": {
+      "start": "04:00",
+      "end": "10:59"
+    },
+    "lunch": {
+      "start": "11:00",
+      "end": "16:59"
+    },
+    "dinner": {
+      "start": "17:00",
+      "end": "03:59"
+    }
+  },
+  "fallback_type": "other",
+  "providers": {
+    "uber": "taxi",
+    "apcoa": "parking",
+    "ringgo": "parking",
+    "gwr": "train",
+    "great western railway": "train",
+    "kfc": "other"
+  }
+}
