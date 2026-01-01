@@ -137,10 +137,122 @@ python path\to\rename_receipts.py --base-dir .
 - `--base-dir PATH` – Base directory to scan. Defaults to the current directory (`.`). You can pass either a relative or an absolute path.
 - `--dry-run` – Shows what would be renamed without making any changes to files.
 
+## Pre-built Binaries
+
+Pre-built standalone executables are available for Windows, macOS, and Linux from the [GitHub Releases](https://github.com/jduraes/rename-receipts/releases) page.
+
+### Installation
+
+1. Download the appropriate executable for your platform:
+   - **Windows**: `rename-receipts-windows.exe`
+   - **macOS**: `rename-receipts-macos`
+   - **Linux**: `rename-receipts-linux`
+
+2. On macOS/Linux, make the file executable:
+   ```bash
+   chmod +x rename-receipts-macos  # or rename-receipts-linux
+   ```
+
+3. Install Tesseract OCR (required for OCR functionality):
+   - **Windows**: Download from [UB-Mannheim Tesseract](https://github.com/UB-Mannheim/tesseract/wiki)
+   - **macOS**: `brew install tesseract`
+   - **Linux**: `sudo apt-get install tesseract-ocr`
+
+### Running the Executable
+
+```bash
+# Windows
+rename-receipts-windows.exe --base-dir C:\path\to\receipts --dry-run
+
+# macOS/Linux
+./rename-receipts-macos --base-dir /path/to/receipts --dry-run
+```
+
+The executables bundle the `expense_config.json` file, which will be created in the same directory as the executable on first run if it doesn't exist.
+
+## Building from Source
+
+If you prefer to build the executable yourself or need to modify the code:
+
+### Prerequisites
+
+- Python 3.11 or later
+- Tesseract OCR installed on your system
+
+### Steps
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/jduraes/rename-receipts.git
+   cd rename-receipts
+   ```
+
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Build the executable with PyInstaller:
+   ```bash
+   pyinstaller rename_receipts.spec
+   ```
+
+4. The executable will be created in the `dist/` directory:
+   - Windows: `dist/rename-receipts.exe`
+   - macOS/Linux: `dist/rename-receipts`
+
+### Building for Your Platform
+
+The build process uses PyInstaller with a spec file (`rename_receipts.spec`) that:
+- Creates a single executable file (onefile mode)
+- Bundles `expense_config.json` as a data file
+- Configures the executable as a console application
+
+You can customize the build by editing `rename_receipts.spec` before running PyInstaller.
+
+## Release Process (for Maintainers)
+
+To create a new release with pre-built binaries:
+
+1. Update the `VERSION` variable in `rename_receipts.py` (e.g., `VERSION = "1.2.0"`).
+
+2. Commit the version change:
+   ```bash
+   git add rename_receipts.py
+   git commit -m "Bump version to 1.2.0"
+   ```
+
+3. Create and push a new tag:
+   ```bash
+   git tag v1.2.0
+   git push origin v1.2.0
+   ```
+
+4. GitHub Actions will automatically:
+   - Build executables for Windows, macOS, and Linux
+   - Create a GitHub Release with the tag
+   - Attach all three executables as release assets
+
+5. The release will be available at: `https://github.com/jduraes/rename-receipts/releases/tag/v1.2.0`
+
+### Manual Release (if needed)
+
+If you need to create a release manually:
+
+1. Build executables on each platform as described in "Building from Source"
+2. Rename the executables:
+   - `rename-receipts-windows.exe`
+   - `rename-receipts-macos`
+   - `rename-receipts-linux`
+3. Create a new release on GitHub and upload the executables
+
 ## Git repository structure
 
 - `rename_receipts.py` – main script with all logic.
+- `rename_receipts.spec` – PyInstaller spec file for building executables.
+- `requirements.txt` – Python dependencies.
 - `expense_config.json` – default configuration (types, providers, meal time buckets [no pun intended], keywords).
+- `.github/workflows/release.yml` – GitHub Actions workflow for automated releases.
 - `README.md` – this document.
 
 ## Licence

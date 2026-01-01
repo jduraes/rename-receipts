@@ -1,0 +1,129 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            artifact_name: rename-receipts-windows.exe
+            tesseract_install: choco install tesseract
+          - os: macos-latest
+            artifact_name: rename-receipts-macos
+            tesseract_install: brew install tesseract
+          - os: ubuntu-latest
+            artifact_name: rename-receipts-linux
+            tesseract_install: sudo apt-get update && sudo apt-get install -y tesseract-ocr
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Tesseract OCR
+        run: ${{ matrix.tesseract_install }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Build with PyInstaller
+        run: |
+          pyinstaller rename_receipts.spec
+
+      - name: Rename executable (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          Move-Item -Path dist/rename-receipts.exe -Destination dist/${{ matrix.artifact_name }}
+        shell: pwsh
+
+      - name: Rename executable (Unix)
+        if: matrix.os != 'windows-latest'
+        run: |
+          mv dist/rename-receipts dist/${{ matrix.artifact_name }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: dist/${{ matrix.artifact_name }}
+
+  release:
+    name: Create Release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Display structure of downloaded files
+        run: ls -R artifacts
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            artifacts/rename-receipts-windows.exe/rename-receipts-windows.exe
+            artifacts/rename-receipts-macos/rename-receipts-macos
+            artifacts/rename-receipts-linux/rename-receipts-linux
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          body: |
+            ## Release ${{ github.ref_name }}
+            
+            Standalone executables for Windows, macOS, and Linux.
+            
+            ### Installation
+            
+            Download the appropriate executable for your platform:
+            - **Windows**: `rename-receipts-windows.exe`
+            - **macOS**: `rename-receipts-macos`
+            - **Linux**: `rename-receipts-linux`
+            
+            On macOS/Linux, make the file executable:
+            ```bash
+            chmod +x rename-receipts-macos  # or rename-receipts-linux
+            ```
+            
+            ### Usage
+            
+            Run the executable with `--help` to see available options:
+            ```bash
+            ./rename-receipts-macos --help
+            ```
+            
+            For a dry run (no changes):
+            ```bash
+            ./rename-receipts-macos --base-dir /path/to/receipts --dry-run
+            ```
+            
+            ### Requirements
+            
+            Tesseract OCR must be installed on your system for OCR functionality:
+            - **Windows**: Download from [UB-Mannheim](https://github.com/UB-Mannheim/tesseract/wiki)
+            - **macOS**: `brew install tesseract`
+            - **Linux**: `sudo apt-get install tesseract-ocr`
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
