@@ -105,7 +105,7 @@ pip install pdfplumber pillow pytesseract python-dateutil
 Install Tesseract OCR:
 
 - **Windows** – Use a Windows installer (for example, the UB-Mannheim builds). The script will try common locations under
-  `C:\\Program Files\\Tesseract-OCR` and `C:\\Program Files (x86)\\Tesseract-OCR`.
+  `C:\Program Files\Tesseract-OCR` and `C:\Program Files (x86)\Tesseract-OCR`.
 - **macOS** – Install via Homebrew:
   `brew install tesseract`
 - **Linux** – Install via your distribution's package manager, for example on Debian/Ubuntu:
