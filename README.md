@@ -1,4 +1,4 @@
-# rename_receipts v1.0.1
+# rename_receipts v1.1.0
 
 MIT Licence (C) 2026 Joao Miguel Duraes
 
@@ -102,8 +102,17 @@ This script has been hardened against a variety of real-world issues:
 pip install pdfplumber pillow pytesseract python-dateutil
 ```
 
-Install Tesseract OCR (Windows installers are available from UB-Mannheim); the script attempts to auto-detect it under
-`C:\Program Files` or `C:\Program Files (x86)`.
+Install Tesseract OCR:
+
+- **Windows** – Use a Windows installer (for example, the UB-Mannheim builds). The script will try common locations under
+  `C:\\Program Files\\Tesseract-OCR` and `C:\\Program Files (x86)\\Tesseract-OCR`.
+- **macOS** – Install via Homebrew:
+  `brew install tesseract`
+- **Linux** – Install via your distribution's package manager, for example on Debian/Ubuntu:
+  `sudo apt-get install tesseract-ocr`
+
+If Tesseract is installed in a non-standard location, you can point the script at it by setting the `TESSERACT_CMD` environment
+variable to the full path of the `tesseract` binary before running Python.
 
 2. Place `rename_receipts.py` and `expense_config.json` in a directory on your PATH (e.g. `~/bin`) or run them directly.
 

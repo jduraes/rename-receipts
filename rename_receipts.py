@@ -2,13 +2,15 @@
 import argparse
 import datetime as dt
 import json
+import os
+import platform
 import re
 import shutil
 from pathlib import Path
 from dateutil import parser as date_parser
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-VERSION = "1.0.1"
+VERSION = "1.1.0"
 
 STATS = {
     "scanned": 0,
@@ -31,16 +33,25 @@ except ImportError:
     Image = None
     pytesseract = None
 
-# Try to auto-detect Tesseract on Windows so OCR works out of the box.
+# Try to locate Tesseract so OCR works out of the box.
+#
+# Policy:
+# - If TESSERACT_CMD is set and points to an existing binary, use that.
+# - On Windows, fall back to common "Program Files" install locations.
+# - On macOS/Linux, rely on "tesseract" being on PATH (no hard-coded paths).
 if pytesseract is not None:
-    possible_paths = [
-        r"C:\\Program Files\\Tesseract-OCR\\tesseract.exe",
-        r"C:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe",
-    ]
-    for p in possible_paths:
-        if Path(p).exists():
-            pytesseract.pytesseract.tesseract_cmd = p
-            break
+    t_cmd = os.environ.get("TESSERACT_CMD")
+    if t_cmd and Path(t_cmd).exists():
+        pytesseract.pytesseract.tesseract_cmd = t_cmd
+    elif platform.system() == "Windows":
+        possible_paths = [
+            r"C:\\Program Files\\Tesseract-OCR\\tesseract.exe",
+            r"C:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe",
+        ]
+        for p in possible_paths:
+            if Path(p).exists():
+                pytesseract.pytesseract.tesseract_cmd = p
+                break
 
 
 DEFAULT_CONFIG = {
@@ -127,7 +138,7 @@ def already_in_target_format(path: Path) -> bool:
     # Exactly 'unknown' is considered final and should never be changed.
     if v_lower == "unknown":
         return True
-    # 'unknown-*' is not final; we want to normalize those to 'Unknown'.
+    # 'unknown-*' is not final; we want to normalise those to 'Unknown'.
     if v_lower.startswith("unknown-"):
         return False
     # For other vendors, if the vendor itself ends with -digits, treat as not-final so we can clean it.
@@ -224,8 +235,8 @@ DATE_TEXT_PATTERNS = [
 ]
 
 
-def normalize_year(y: int) -> int:
-    """Normalize 2-digit years to 2000-2099."""
+def normalise_year(y: int) -> int:
+    """Normalise 2-digit years to 2000-2099."""
     if y < 100:
         return 2000 + y
     return y
@@ -254,7 +265,7 @@ def extract_dates_from_text(text: str) -> list[dt.date]:
     for s in candidates:
         try:
             dt_obj = date_parser.parse(s, dayfirst=True, yearfirst=False, fuzzy=True)
-            y = normalize_year(dt_obj.year)
+            y = normalise_year(dt_obj.year)
             if not (min_year <= y <= max_year):
                 continue
             dates.add(dt.date(y, dt_obj.month, dt_obj.day))
@@ -281,7 +292,7 @@ def extract_date_from_filename(name: str, fallback_year: int | None = None) -> d
         y2, m2, d2 = int(s[4:8]), int(s[2:4]), int(s[0:2])
         for (y, mo, d) in [(y1, m1, d1), (y2, m2, d2)]:
             try:
-                return dt.date(normalize_year(y), mo, d)
+                return dt.date(normalise_year(y), mo, d)
             except ValueError:
                 continue
 

@@ -3,15 +3,22 @@
     "train": [
       "train",
       "rail",
-      "bahn",
-      "sncf",
-      "trenitalia"
+      "railway",
+      "railways",
+      "national rail",
+      "underground",
+      "overground",
+      "tube",
+      "elizabeth line"
     ],
     "parking": [
       "parking",
-      "parkhaus",
+      "car park",
+      "carpark",
       "garage",
-      "parc auto"
+      "parkingeye",
+      "paybyphone",
+      "ncp"
     ],
     "hotel": [
       "hotel",
@@ -22,46 +29,71 @@
     "taxi": [
       "taxi",
       "cab",
+      "minicab",
       "uber",
-      "lyft",
       "bolt"
     ],
     "bus": [
-      "bus"
+      "bus",
+      "coach",
+      "national express",
+      "megabus",
+      "flixbus",
+      "stagecoach",
+      "first bus",
+      "arriva"
     ],
     "tram": [
       "tram",
-      "streetcar",
-      "tramway"
+      "light rail",
+      "dlr",
+      "metrolink"
     ],
     "breakfast": [
       "breakfast",
-      "petit dejeuner",
-      "colazione"
+      "full english",
+      "full breakfast"
     ],
     "lunch": [
       "lunch",
-      "mittagessen",
-      "pranzo"
+      "sandwich",
+      "meal deal"
     ],
     "dinner": [
       "dinner",
-      "abendessen",
-      "cena"
+      "supper",
+      "takeaway",
+      "take-away",
+      "take away"
     ]
   },
   "meal_keywords": [
     "restaurant",
-    "ristorante",
     "cafe",
-    "cafè",
     "coffee",
     "bar",
     "bistro",
-    "ristorante",
+    "pub",
     "food",
     "meal",
-    "snack"
+    "snack",
+    "takeaway",
+    "take-away",
+    "take away",
+    "chip shop",
+    "fish and chips",
+    "mcdonalds",
+    "burger king",
+    "subway",
+    "starbucks",
+    "costa",
+    "pret",
+    "greggs",
+    "dominos",
+    "pizza hut",
+    "wagamama",
+    "nandos",
+    "five guys"
   ],
   "meal_time_buckets": {
     "breakfast": {
@@ -84,6 +116,42 @@
     "ringgo": "parking",
     "gwr": "train",
     "great western railway": "train",
+    "avanti west coast": "train",
+    "avanti": "train",
+    "lner": "train",
+    "transpennine express": "train",
+    "tpe": "train",
+    "chiltern railways": "train",
+    "chiltern": "train",
+    "crosscountry": "train",
+    "east midlands railway": "train",
+    "emr": "train",
+    "greater anglia": "train",
+    "thameslink": "train",
+    "southern": "train",
+    "northern": "train",
+    "c2c": "train",
+    "south western railway": "train",
+    "swr": "train",
+    "southeastern": "train",
+    "west midlands railway": "train",
+    "wmt": "train",
+    "merseyrail": "train",
+    "scotrail": "train",
+    "gatwick express": "train",
+    "heathrow express": "train",
+    "elizabeth line": "train",
+    "tfl rail": "train",
+    "trainline": "train",
+    "national express": "bus",
+    "megabus": "bus",
+    "flixbus": "bus",
+    "stagecoach": "bus",
+    "first bus": "bus",
+    "arriva": "bus",
+    "ncp": "parking",
+    "parkingeye": "parking",
+    "paybyphone": "parking",
     "kfc": "other"
   }
 }
