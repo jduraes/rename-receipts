@@ -1,0 +1,28 @@
+# Build artifacts
+build/
+dist/
+
+# Python artifacts
+*.pyc
+__pycache__/
+*.pyo
+*.egg-info/
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Backup directory
+originals/
